@@ -9,7 +9,7 @@ Some new features
 ==================
 1. JWT authorization method
 2. User management
-3. Room management
+3. Rooms management
 
 
 Work is still in progress
