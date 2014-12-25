@@ -19,7 +19,7 @@ prerequisites:-
   - Go distribution from https://golang.org/
   - MongoDb from http://www.mongodb.org/
 
-1. Open cmd and run this command 'go get github.com/KasemJaffer/gowebso' this will download the project in the 
+1. Open cmd and run this command 'go get github.com/KasemJaffer/gowebso' this will download the project into your go workspace
 2. Make sure mongodb is running (cmd: mongod)
 3. Open cmd in the project folder
 4. Type 'go get' and press enter this will download the library used in the project
