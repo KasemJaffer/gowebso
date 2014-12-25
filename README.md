@@ -10,6 +10,7 @@ Some of the new features
 1. JWT authorization method
 2. User management
 3. Rooms management
+4. Mongo db to store the users data
 
 
 Work is still in progress
