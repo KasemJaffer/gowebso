@@ -8,7 +8,7 @@ import (
 )
 
 func main() {
-	//printIps()
+	printIps()
 	flag.Parse()
 	http.Handle("/", homeHandler())
 	http.Handle("/ws", authorize(wsHandler()))
@@ -23,12 +23,16 @@ func main() {
 //If the access token was verified it responds with a new JWT and the user retrieved.
 func loginHandler() http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		socialToken := r.Header.Get("token")
-		provider := r.Header.Get("provider")
 		var user User
+		var data LoginBinding
+
+		parseBody(r.Body, &data)
+
+		log.Println("Token: " + data.Token)
+		log.Println("Provider: " + data.Provider)
 
 		//api call to verify and get the user data
-		if err := getUserFromSocialTokens(socialToken, provider, &user); err != nil {
+		if err := getUserFromSocialTokens(data.Token, data.Provider, &user); err != nil {
 			respondFailWithJson(w, &ResponseMessage{Message: err.Error()}, http.StatusBadRequest)
 			return
 		}

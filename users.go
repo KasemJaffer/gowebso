@@ -8,7 +8,7 @@ import (
 
 //This is the user model
 type User struct {
-	SocailId       string
+	SocialId       string
 	Name           string
 	Email          string
 	Birthday       string
@@ -16,6 +16,7 @@ type User struct {
 	Link           string
 	Timezone       int
 	SocialUserName string
+	Picture        string
 }
 
 //Finds the user in mongodb by email and sets the provided with the result
@@ -65,4 +66,9 @@ func (user *User) getUserFromHeader(r *http.Request) {
 func (user *User) addUserToHeader(r *http.Request) {
 	r.Header.Add("email", user.Email)
 	r.Header.Add("name", user.Name)
+}
+
+type LoginBinding struct {
+	Token    string
+	Provider string
 }

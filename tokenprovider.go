@@ -58,23 +58,59 @@ func getUserFromSocialTokens(token string, provider string, user *User) error {
 		var data map[string]interface{}
 		parseBody(res.Body, &data)
 		log.Println("Parse Success")
-		user.SocailId = data["id"].(string)
-		user.Email = data["email"].(string)
-		user.Name = data["name"].(string)
-		user.Link = data["link"].(string)
-		user.Birthday = data["birthday"].(string)
-		user.Gender = data["gender"].(string)
-		user.Timezone = int(data["timezone"].(float64))
-		user.SocialUserName = data["username"].(string)
+		user.SocialId = getStringProperty(data, "id")
+		user.Email = getStringProperty(data, "email")
+		user.Name = getStringProperty(data, "name")
+		user.Link = getStringProperty(data, "link")
+		user.Birthday = getStringProperty(data, "birthday")
+		user.Gender = getStringProperty(data, "gender")
+		user.Timezone = getIntProperty(data, "timezone")
+		user.SocialUserName = getStringProperty(data, "username")
 		log.Println("User Success")
 		return nil
 
-	case "gmail":
-		return errors.New("not implemented yet")
+	case "google":
+		url := "https://www.googleapis.com/oauth2/v1/userinfo?alt=json&access_token=" + token
+		//log.Println("Calling: " + url)
+		res, err := http.Get(url)
+
+		if err != nil || res.StatusCode != http.StatusOK {
+			log.Println("Calling Error: " + err.Error())
+			return errors.New("invalid token")
+		}
+
+		log.Println("Calling Success")
+
+		var data map[string]interface{}
+		parseBody(res.Body, &data)
+		log.Println("Parse Success")
+		user.SocialId = getStringProperty(data, "id")
+		user.Email = getStringProperty(data, "email")
+		user.Name = getStringProperty(data, "name")
+		user.Link = getStringProperty(data, "link")
+		user.Birthday = getStringProperty(data, "birthday")
+		user.Gender = getStringProperty(data, "gender")
+		user.Picture = getStringProperty(data, "picture")
+		log.Println("User Success")
+		return nil
 
 	default:
 		return errors.New("unsupported provider")
 	}
+}
+
+func getIntProperty(data map[string]interface{}, name string) int {
+	if val := data[name]; val != nil {
+		return int(val.(float64))
+	}
+	return 0
+}
+
+func getStringProperty(data map[string]interface{}, name string) string {
+	if val := data[name]; val != nil {
+		return val.(string)
+	}
+	return ""
 }
 
 const jwtSigningKey = `-----BEGIN RSA PRIVATE KEY-----
